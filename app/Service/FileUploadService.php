@@ -14,10 +14,6 @@ use Carbon\Carbon;
 class FileUploadService
 {
 
-
-
-
-
     public function handleUpload(array $validated, array $files): array {
         $token = $this->token();
         $expiresInDays = $validated['expires_in'] ?? 1; #One happens to be the default value, Meaning, to expire next day after current date

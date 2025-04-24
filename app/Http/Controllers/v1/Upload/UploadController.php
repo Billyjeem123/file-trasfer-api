@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\v1\Upload;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileRequest;
 use App\Service\FileUploadService;
 use App\Models\UploadSession;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
@@ -18,14 +18,9 @@ class UploadController extends Controller
     {
         $this->fileService = $fileService;
     }
-    public function upload(Request $request)
+    public function upload(FileRequest $request)
     {
-        $validated = $request->validate([
-            'files' => 'required|array|max:5',
-            'files.*' => 'file|max:102400|mimes:jpg,png,pdf,docx,zip',
-            'expires_in' => 'nullable|integer|min:1|max:30',
-            'email_to_notify' => 'nullable|email',
-        ]);
+        $validated = $request->validated();
 
         $data = $this->fileService->handleUpload($validated, $request->file('files'));
 
