@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\UploadSession;
 use App\Models\UploadFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Mail;
@@ -14,9 +15,12 @@ class FileUploadService
 {
 
 
+
+
+
     public function handleUpload(array $validated, array $files): array {
         $token = $this->token();
-        $expiresInDays = $validated['expires_in'] ?? 1;
+        $expiresInDays = $validated['expires_in'] ?? 1; #One happens to be the default value, Meaning, to expire next day after current date
         $email = $validated['email_to_notify'] ?? null;
 
         $session = UploadSession::create([
@@ -36,9 +40,13 @@ class FileUploadService
 
         $downloadLink = url("/api/download/{$token}");
 
-        if ($email) {
-            Mail::to($email)->queue(new UploadNotificationMail($downloadLink));
-            $session->update(['notified' => true]);
+        try {
+            if ($email) {
+                Mail::to($email)->send(new UploadNotificationMail($downloadLink));
+                $session->update(['notified' => true]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send upload notification email: ' . $e->getMessage());
         }
 
         return ['token' => $token];
