@@ -3,7 +3,7 @@
 This is a Laravel 10+ backend API for uploading, storing, and sharing files securely via generated download links. 
 
 ## 🚀 Features
-- Upload up to 5 files
+- Upload up to 5 files (Max size 100MB)
 - Generate download link
 - Optional: Email notification
 - Auto-expiry after set days
