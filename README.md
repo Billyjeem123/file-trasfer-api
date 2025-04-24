@@ -3,7 +3,7 @@
 This is a Laravel 10+ backend API for uploading, storing, and sharing files securely via generated download links. 
 
 ## 🚀 Features
-- Upload up to 5 files (max 100MB each)
+- Upload up to 5 files
 - Generate download link
 - Optional: Email notification
 - Auto-expiry after set days
@@ -11,7 +11,7 @@ This is a Laravel 10+ backend API for uploading, storing, and sharing files secu
 
 ## 🛠 Setup
 
-```bash
+```
 git clone https://github.com/Billyjeem123/file-trasfer-api.git
 cd file-trasfer-api
 composer install
@@ -21,7 +21,15 @@ php artisan migrate
 
 ````
 
+## 🛠 Documentation
+`````
+Postman Documentation Url: https://documenter.getpostman.com/view/21023738/2sB2ixkZjg
+
+Check public folder for the exported postman documentation
+``````
+
 # Guide on usage: 
+
 📤 Upload API
 POST /api/upload
 Form Data:
