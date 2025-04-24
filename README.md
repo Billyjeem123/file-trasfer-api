@@ -49,7 +49,7 @@ Returns:
 
 {
   "success": true,
-  "download_link": "http://file-transfer-api.test/api/download/{token}"
+  "download_link": "http://base-url/api/download/{token}"
 }
 ````
 
