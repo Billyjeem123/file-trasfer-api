@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "090ad369-4e47-4cd2-8293-2dda0a360b60",
+		"name": "WeTransfer API",
+		"description": "# 📁 WeTransfer-style Laravel API — Detailed Endpoint Guide\n\nThis folder contains a detailed explanation of the Laravel-powered file upload and sharing API. It allows users to upload multiple files, receive a secure download link, and automatically expire after a set period.\n\n---\n\n## ✅ API Overview\n\n- Built with **Laravel 10+**\n    \n- Stores files using Laravel’s `Storage` (local)\n    \n- Uploads are associated with a unique `token`\n    \n- Files expire automatically after 5 days\n    \n- Optionally notifies users via email\n    \n\n---",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21023738"
+	},
+	"item": [
+		{
+			"name": "Upload File",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files[0]",
+							"description": "an array of filles, if wanted",
+							"type": "file",
+							"src": "/C:/Users/user/Pictures/Screenshots/Screenshot 2025-04-03 072638.png"
+						},
+						{
+							"key": "files[1]",
+							"type": "file",
+							"src": "/C:/Users/user/Pictures/Screenshots/Screenshot 2025-04-15 134619.png"
+						},
+						{
+							"key": "expires_in",
+							"value": "",
+							"description": "desired  date time. wanted to expire in days e.g 1 a day from now 2 2 days from now(optional)",
+							"type": "text"
+						},
+						{
+							"key": "email_to_notify",
+							"value": "",
+							"description": "Desired email to laert(Optional)",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "file-transfer-api.test/api/upload",
+					"host": [
+						"file-transfer-api",
+						"test"
+					],
+					"path": [
+						"api",
+						"upload"
+					]
+				},
+				"description": "---\n\n## 📤 Upload Endpoint\n\n**POST** `/api/upload`\n\n**Request Type:** `multipart/form-data`\n\n### 🔸 Parameters:\n\n| Name | Type | Required | Description |\n| --- | --- | --- | --- |\n| `files[]` | File | ✅ Yes | Up to 5 files, each max 100MB |\n| `expires_in` | Integer | ❌ No | Specify the number of days the download link should remain valid.  <br>For example:  <br>  <br>1 means it expires 1 day after upload  <br>  <br>2 means it expires 2 days after upload |\n| `email_to_notify` | String | ❌ No | Email to notify with download link |\n\n### ✅ Validation Rules:\n\n- Max 5 files per upload\n    \n- Allowed formats: `jpg, png, pdf, docx, zip`\n    \n- Max size: 100MB/file\n    \n\n#"
+			},
+			"response": []
+		},
+		{
+			"name": "Download File",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "file-transfer-api.test/api/download/704757",
+					"host": [
+						"file-transfer-api",
+						"test"
+					],
+					"path": [
+						"api",
+						"download",
+						"704757"
+					]
+				},
+				"description": "StartFragment\n\n## File Download API\n\n### `GET /api/download/{token}`\n\nThis endpoint allows anyone with a valid token to download the file(s) from an upload session.\n\n### 🔗 Example Request:\n\n```\narduinoCopyEditGET file-transfer-api.test/api/download/704757\n\n ```\n\n### 🎯 What Happens:\n\n- Validates the token.\n    \n- If the token is **expired**, it returns an error message.\n    \n- If valid:\n    \n    - Streams the files (if multiple, could be zipped).\n        \n    - Automatically increments the download count for each file.\n        \n\n### 📥 Response:\n\n- A direct download of the file(s).\n    \n- No JSON is returned — just the file download starts.\n    \n- On error (e.g., expired or invalid token), it returns a `404` or custom error response.\n    \n\n  \n\n### Notes:\n\n- This link is **public** — no authentication required.\n    \n- The download count is updated **each time the link is used**.\n    \n- If the session has expired (based on `expires_in` days), download is blocked.\n    \n- If **only one file** is associated, it will be streamed directly as a **single file download**.\n    \n- If **multiple files** are associated, they will be **zipped automatically** and served as a single `.zip` file. Automatically increments the download count for each file."
+			},
+			"response": []
+		},
+		{
+			"name": "File download statistics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "file-transfer-api.test/api/stats/704757",
+					"host": [
+						"file-transfer-api",
+						"test"
+					],
+					"path": [
+						"api",
+						"stats",
+						"704757"
+					]
+				},
+				"description": "### `GET /api/uploads/stats/{token}`\n\nThis endpoint returns detailed information about the files uploaded in a transfer session.\n\n### 🔗 Example Request:\n\n```\nGET file-transfer-api.test/api/uploads/stats/704757\n\n ```\n\n### Response:\n\n```\n{\n  \"expires_at\": \"2025-04-30 15:42:21\",\n  \"files\": [\n    {\n      \"name\": \"project.zip\",\n      \"downloads\": 4,\n      \"size\": \"12.3 MB\"\n    },\n    {\n      \"name\": \"screenshot.png\",\n      \"downloads\": 1,\n      \"size\": \"521.6 KB\"\n    }\n  ]\n}\n\n ```\n\n### Notes:\n\n- `expires_at`: The date and time when the download link will no longer work.\n    \n- `downloads`: Total number of times each file has been downloaded.\n    \n- `size`: File size is returned in a **human-readable format** (KB, MB, etc.)."
+			},
+			"response": []
+		}
+	]
+}
