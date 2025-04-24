@@ -12,8 +12,8 @@ This is a Laravel 10+ backend API for uploading, storing, and sharing files secu
 ## 🛠 Setup
 
 ```bash
-git clone https://github.com/Billyjeem123/wetransfer-api.git
-cd wetransfer-api
+git clone https://github.com/Billyjeem123/file-trasfer-api.git
+cd file-trasfer-api
 composer install
 cp .env.example .env
 php artisan key:generate
@@ -28,7 +28,9 @@ Form Data:
 
 files[] (required)
 
-expires_in (optional, in days)
+expires_in (optional, in default 1 means it expires 1 day after upload
+
+2 means it expires 2 days after upload)
 
 email_to_notify (optional)
 
@@ -70,6 +72,6 @@ php artisan clean:expired-uploads
 
 ☁️ Used Laravel storage system for the Upload
 
-📨 Email notifications handled via queues.
+📨 Email notifications handled via queues. Laravel data base queue(Used in this case).
 
 # file-trasfer-api
